@@ -6,27 +6,54 @@ Multi-agent AI development templates for [opencode](https://github.com/sst/openc
 
 A ready-to-use template for setting up **multi-agent AI development workflows** with opencode. Instead of a single AI assistant doing everything, work is delegated to specialized agents—each optimized for their role.
 
+Two stacks are available: **Python** and **TypeScript**.
+
+---
+
 ## The Agents
 
-### Core Agents
+### Python Stack
 
-| Agent | Role | Key Trait |
-|-------|------|-----------|
-| **Oscar** | Orchestrator | Coordinates, delegates, synthesizes—never does the work himself |
-| **Scout** | Researcher + Planner | Digs deep into codebases, creates actionable implementation plans |
-| **Ivan** | Implementor | Writes code, runs tests, follows specs precisely |
-| **Jester** | Truth-Teller (default) | Challenges assumptions, finds blind spots (called for risky changes) |
+| Agent | Name | Role | Model |
+|-------|------|------|-------|
+| **Oscar** | `oscar` | Orchestrator — coordinates, delegates, synthesizes | DeepSeek Pro |
+| **Scout** | `scout` | Researcher + Planner — deep analysis, actionable plans | DeepSeek Pro |
+| **Ivan** | `ivan` | Implementor — writes code, runs tests, git operations | DeepSeek Flash |
+| **Jester** | `jester` | Truth-Teller — challenges assumptions | DeepSeek Flash |
+| **Marco** | `marco` | QA Engineer + Documenter (optional) — verifies, tests, documents | DeepSeek Flash |
 
-### Jester Variants
+**Jester Consensus variants:**
 
-| Agent | Model | Use Case |
-|-------|-------|----------|
-| **jester** | Claude Opus | Default truth-teller |
-| **jester_opus** | Claude Opus | Explicit Opus variant |
-| **jester_qwen** | Qwen3 Coder | Code-focused analysis |
-| **jester_grok** | Grok | Alternative perspective |
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| `jester_opus` | DeepSeek Pro | Consensus trio |
+| `jester_qwen` | DeepSeek Flash | Consensus trio |
+| `jester_grok` | DeepSeek Flash | Consensus trio |
 
-### The Orchestrator Pattern
+### TypeScript Stack
+
+| Agent | Name | Role | Model |
+|-------|------|------|-------|
+| **Ostype** | `ostype` | Orchestrator — coordinates, delegates, synthesizes | DeepSeek Pro |
+| **Tylead** | `tylead` | Technical Lead — research, architecture, planning | DeepSeek Pro |
+| **Tyson** | `tyson` | Backend Implementor — Node.js, Bun.js, all frameworks/ORMs | DeepSeek Flash |
+| **Nova** | `nova` | Frontend Implementor — React, TanStack Router/Query/Table | DeepSeek Flash |
+| **Marco** | `marco` | Truth-Teller — challenges assumptions | DeepSeek Flash |
+| **Quill** | `quill` | QA Engineer + Documenter (optional) — verifies, tests, documents | DeepSeek Flash |
+
+**Marco Consensus variants:**
+
+| Agent | Model | Purpose |
+|-------|-------|---------|
+| `marco_opus` | DeepSeek Pro | Consensus trio |
+| `marco_qwen` | DeepSeek Flash | Consensus trio |
+| `marco_grok` | DeepSeek Flash | Consensus trio |
+
+---
+
+## Workflow
+
+### Python Orchestrator Pattern
 
 ```
 User Request
@@ -42,42 +69,46 @@ User Request
     └──→ Ivan (implement) ──→ Done ◄─┘
 ```
 
-**Why this pattern?**
-
-- **Context efficiency** — Oscar stays lean, delegating heavy lifting to specialists
-- **Separation of concerns** — Research, planning, and implementation are distinct phases
-- **Quality gates** — Jester provides adversarial review for risky changes
-- **Parallel execution** — Independent tasks can run simultaneously
-
-## Jester Consensus Pattern
-
-For high-stakes decisions, run all three Jester variants in parallel and synthesize their feedback:
+### TypeScript Orchestrator Pattern
 
 ```
-Oscar
+User Request
+    │
+    ▼
+  Ostype ─────────────────────────────────────┐
+    │                                          │
+    ├──→ Tylead (research + plan)              │
+    │         │                                │
+    │         ├──→ Marco (challenge)           │ ← optional
+    │         │                                │
+    │         ▼                                │
+    ├──→ Tyson (backend implement) ──┐         │
+    ├──→ Nova (frontend implement) ──┤──→ Done◄┘
+```
+
+### With-QA Variant
+
+When QA Engineer is included, the workflow adds a verification gate:
+
+```
+... → implement → Quill/Marco (verify + document) → Done
+```
+
+The QA Engineer verifies acceptance criteria, writes missing tests, updates documentation, and reports bugs before work is marked complete.
+
+### Consensus Pattern
+
+For high-stakes decisions, run all three variants in parallel:
+
+```
+Oscar/Ostype
   │
-  ├──→ @jester_opus ──┐
-  ├──→ @jester_qwen ──┼──→ Synthesize → Decision
-  └──→ @jester_grok ──┘
+  ├──→ @jester_opus / @marco_opus ──┐
+  ├──→ @jester_qwen / @marco_qwen ──┼──→ Synthesize → Decision
+  └──→ @jester_grok / @marco_grok ──┘
 ```
 
-**When to use Jester Consensus:**
-
-- **Major architectural decisions** — Changing core abstractions, adding new patterns
-- **Risky refactors** — Changes touching >5 files or critical paths
-- **Diverse perspectives needed** — When you want multiple AI viewpoints on a problem
-- **Breaking ties** — When the team is stuck or going in circles
-
-**How it works:**
-
-1. Oscar dispatches the same question to all three Jesters in parallel
-2. Each Jester analyzes independently using their underlying model
-3. Oscar synthesizes the responses, looking for:
-   - **Agreement** — All three flag the same issue = high confidence
-   - **Disagreement** — Different concerns = explore each angle
-   - **Unique insights** — One Jester sees something others miss = investigate
-
-Most of what any single Jester says is noise, but consensus across models is signal.
+---
 
 ## Installation
 
@@ -96,26 +127,27 @@ Or see [opencode installation docs](https://github.com/sst/opencode#installation
 git clone https://github.com/yourusername/opencode-agents.git
 cd opencode-agents
 
-# Run the installer script
+# Run the installer
 ./install.sh
 ```
 
-The installer copies agent definitions to `~/.config/opencode/agent/`.
+The installer will prompt you to:
 
-### 3. Configure opencode
+1. **Select tech stack** — Python or TypeScript
+2. **Include QA Engineer** — Optionally add a QA + Documentation agent to the team
+3. **Generate opencode.json** — Automatically merges `agents.json` into the template
+
+The installer copies agent `.md` files to `~/.config/opencode/agent/` and generates `~/.config/opencode/opencode.json` from the selected stack's `agents.json`.
+
+### 3. Set your API key
 
 ```bash
-# Copy the example configuration
-cp opencode.json.example ~/.config/opencode/opencode.json
-
-# Edit to customize models (optional)
-nano ~/.config/opencode/opencode.json
+export ZEN_API_KEY="your-api-key-here"
 ```
 
 ### 4. Copy AGENTS.md to your project
 
 ```bash
-# Copy and customize the template AGENTS.md
 cp AGENTS.md /path/to/your/project/
 ```
 
@@ -128,49 +160,61 @@ Edit `AGENTS.md` in your project to add project-specific context.
 opencode
 ```
 
-Then talk to Oscar:
+Then talk to the orchestrator:
 
-```
+```bash
+# Python stack
 @oscar: I need to add user authentication to the app
+
+# TypeScript stack
+@ostype: I need to add user authentication to the app
 ```
+
+---
 
 ## Configuration
 
-The `opencode.json.example` file contains the full agent configuration:
+Agent registrations live in `agents.json` at each stack path:
+
+- `.opencode/agent/python/agents.json`
+- `.opencode/agent/typescript/agents.json`
+
+The installer reads the selected `agents.json` and merges it into `opencode.json.example` to produce `~/.config/opencode/opencode.json`.
+
+### Example generated config
 
 ```json
 {
   "model": "zen/claude-opus-4-5",
   "default_agent": "oscar",
   "agent": {
-    "oscar": { ... },
-    "scout": { ... },
-    "ivan": { ... },
-    "jester": { "model": "zen/claude-opus-4-5", ... },
-    "jester_opus": { "model": "zen/claude-opus-4-5", ... },
-    "jester_qwen": { "model": "zen/qwen3-coder-480b", ... },
-    "jester_grok": { "model": "zen/grok-3", ... }
+    "oscar": {
+      "description": "Orchestrator - coordinates, delegates, synthesizes",
+      "mode": "primary",
+      "model": "zen/deepseek-v4-pro",
+      "prompt": "{file:~/.config/opencode/agent/oscar.md}"
+    },
+    "scout": {
+      "description": "Researcher + Planner - deep analysis, actionable plans",
+      "mode": "subagent",
+      "model": "zen/deepseek-v4-pro",
+      "prompt": "{file:~/.config/opencode/agent/scout.md}"
+    },
+    "ivan": {
+      "description": "Implementor - writes code, runs tests, git operations",
+      "mode": "subagent",
+      "model": "zen/deepseek-v4-flash",
+      "prompt": "{file:~/.config/opencode/agent/ivan.md}"
+    }
   }
 }
 ```
 
 ### Customizing Models
 
-Edit `~/.config/opencode/opencode.json` to:
+Edit `~/.config/opencode/opencode.json` to change model assignments per agent.
 
-- **Change the default model** — Update the top-level `"model"` field
-- **Use different Jester models** — Swap model providers for each variant
-- **Add new variants** — Create additional Jester entries with different models
-
-### Why Multiple Jesters?
-
-Different AI models have different strengths and blind spots:
-
-- **Claude Opus** — Strong reasoning, good at finding logical flaws
-- **Qwen3 Coder** — Code-focused, catches implementation issues
-- **Grok** — Alternative perspective, different training data
-
-Running all three in parallel for critical decisions gives you diverse viewpoints.
+---
 
 ## File Structure
 
@@ -178,45 +222,71 @@ Running all three in parallel for critical decisions gives you diverse viewpoint
 opencode-agents/
 ├── .opencode/
 │   ├── agent/
-│   │   ├── oscar.md          # Orchestrator
-│   │   ├── scout.md          # Researcher + Planner
-│   │   ├── ivan.md           # Implementor
-│   │   └── jester.md         # Truth-Teller
-│   └── skills/
-│       ├── python-code-review/   # Python code review checklist
-│       ├── python-testing/       # pytest patterns and best practices
-│       ├── python-venv/          # Virtual environment management
-│       ├── pr-review/            # Pull request review guidelines
-│       ├── git-commit/           # Commit message conventions
-│       ├── issue-triage/         # GitHub issue triage workflow
-│       ├── prompt-engineering/   # LLM prompt design patterns
-│       ├── data-pipeline/        # Data pipeline best practices
-│       ├── ml-experiment/        # ML experiment tracking
-│       └── agent-tuning/         # Agent prompt optimization
-├── AGENTS.md             # Template for project-specific context
-├── README.md             # This file
-├── install.sh            # Installer script
-└── opencode.json.example # Example configuration
+│   │   ├── python/
+│   │   │   ├── agents.json           # Agent registrations
+│   │   │   ├── oscar.md              # Orchestrator
+│   │   │   ├── scout.md              # Researcher + Planner
+│   │   │   ├── ivan.md               # Implementor
+│   │   │   ├── jester.md             # Truth-Teller
+│   │   │   └── with-qa/
+│   │   │       ├── oscar.md          # Orchestrator (with QA workflow)
+│   │   │       ├── scout.md          # Researcher (with QA workflow)
+│   │   │       └── marco.md          # QA Engineer + Documenter
+│   │   └── typescript/
+│   │       ├── agents.json           # Agent registrations
+│   │       ├── ostype.md             # Orchestrator
+│   │       ├── tylead.md             # Technical Lead
+│   │       ├── tyson.md              # Backend Implementor
+│   │       ├── nova.md               # Frontend Implementor
+│   │       ├── marco.md              # Truth-Teller
+│   │       └── with-qa/
+│   │           ├── ostype.md         # Orchestrator (with QA workflow)
+│   │           ├── tylead.md         # Tech Lead (with QA workflow)
+│   │           └── quill.md          # QA Engineer + Documenter
+│   └── skills/                       # Reusable knowledge modules
+│       ├── 5whys/
+│       ├── feynman/
+│       ├── git-commit/
+│       ├── issue-triage/
+│       ├── pr-review/
+│       ├── prompt-engineering/
+│       ├── python-venv/
+│       ├── senior-qa/
+│       ├── test-driven-development/
+│       └── ... (40+ skills)
+├── AGENTS.md                         # Template for project-specific context
+├── README.md                         # This file
+├── install.sh                        # Installer script
+└── opencode.json.example             # Template config (agents filled by installer)
 ```
+
+---
 
 ## Skills
 
 Skills are reusable knowledge modules that agents can load on-demand using the `Skill` tool. Each skill contains domain-specific expertise in a `SKILL.md` file.
 
-### Available Skills
+### Available Skills (40+)
 
 | Skill | Description |
 |-------|-------------|
-| **python-code-review** | Comprehensive Python code review checklist covering style, types, error handling, and performance |
-| **python-testing** | pytest patterns, fixtures, mocking strategies, and test organization |
-| **python-venv** | Virtual environment setup, dependency management, and common pitfalls |
-| **pr-review** | Pull request review guidelines for thorough, constructive feedback |
-| **git-commit** | Conventional commit message format and best practices |
-| **issue-triage** | GitHub issue triage workflow for prioritization and labeling |
-| **prompt-engineering** | LLM prompt design patterns, few-shot examples, and optimization techniques |
-| **data-pipeline** | Data pipeline architecture, validation, and monitoring patterns |
-| **ml-experiment** | ML experiment tracking, reproducibility, and model versioning |
-| **agent-tuning** | Agent prompt optimization and behavior refinement techniques |
+| **5whys** | Root cause analysis |
+| **cynefin** | Problem categorization |
+| **feynman** | Explain complex concepts simply |
+| **git-commit** | Conventional commit messages |
+| **issue-triage** | GitHub issue triage |
+| **ooda** | OODA loop decisions |
+| **pr-review** | PR review guidelines |
+| **premortem** | Imagine failure, identify risks |
+| **prompt-engineering** | LLM prompt design patterns |
+| **python-venv** | Virtual environment management |
+| **senior-architect** | System design + architecture patterns |
+| **senior-qa** | QA strategies + test automation |
+| **senior-fullstack** | Full-stack patterns |
+| **subagent-driven-development** | Implementer/spec-reviewer/code-quality prompts |
+| **test-driven-development** | TDD + testing anti-patterns |
+| **verification-before-completion** | Pre-completion verification |
+| ... | (40+ total) |
 
 ### How Skills Work
 
@@ -248,24 +318,17 @@ mkdir -p ~/.config/opencode/skills/my-custom-skill
 echo "# My Custom Skill\n\nSkill content here..." > ~/.config/opencode/skills/my-custom-skill/SKILL.md
 ```
 
+---
+
 ## Key Principles
 
-1. **Oscar delegates everything** — He coordinates but never reads files or writes code
-2. **Scout digs deep, plans lean** — Research flows naturally into actionable tasks
-3. **Ivan follows specs** — No improvisation; if the plan is unclear, ask
-4. **Jester challenges** — Called for complex refactors (>5 files) or risky changes
+1. **Orchestrator delegates everything** — Never reads files or writes code
+2. **Researcher digs deep, plans lean** — Research flows naturally into actionable tasks
+3. **Implementor follows specs** — No improvisation; if the plan is unclear, ask
+4. **Truth-Teller challenges** — Called for complex refactors (>5 files) or risky changes
+5. **QA verifies before done** — Acceptance criteria must be met, tests written, docs updated
 
-## When to Call Jester
-
-Jester runs at high temperature (0.8) intentionally—he's a wildcard oracle. Call him when:
-
-- Complex refactors touching >5 files
-- Risky architectural changes
-- The team is stuck or going in circles
-- A plan feels "correct" but dead
-- Everyone agrees too quickly (dangerous!)
-
-Most of what Jester says is noise, but buried in there is golden insight. Pan for gold.
+---
 
 ## Customization
 
@@ -273,7 +336,10 @@ The agent files are designed to be project-agnostic. Customize them by:
 
 1. **Adjusting tool permissions** in the frontmatter
 2. **Adding project-specific rules** to `AGENTS.md`
-3. **Modifying code standards** in Ivan's file for your language/framework
+3. **Modifying code standards** in implementor files for your language/framework
+4. **Editing `agents.json`** to change model assignments or add new agents
+
+---
 
 ## License
 

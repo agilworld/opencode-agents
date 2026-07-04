@@ -1,0 +1,56 @@
+{
+    "ostype": {
+        "description": "Orchestrator (TypeScript) - coordinates, delegates, synthesizes",
+        "mode": "primary",
+        "model": "zen/deepseek-v4-pro",
+        "prompt": "{file:~/.config/opencode/agent/ostype.md}"
+    },
+    "tylead": {
+        "description": "Technical Lead (TypeScript) - research, architecture, planning",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-pro",
+        "prompt": "{file:~/.config/opencode/agent/tylead.md}"
+    },
+    "tyson": {
+        "description": "Backend Implementor (TypeScript) - Node.js, Bun.js, all frameworks/ORMs",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-flash",
+        "prompt": "{file:~/.config/opencode/agent/tyson.md}"
+    },
+    "nova": {
+        "description": "Frontend Implementor (TypeScript) - React, TanStack Router/Query/Table",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-flash",
+        "prompt": "{file:~/.config/opencode/agent/nova.md}"
+    },
+    "quill": {
+        "description": "QA Engineer + Documenter - verifies implementations, writes tests, maintains docs",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-flash",
+        "prompt": "{file:~/.config/opencode/agent/quill.md}"
+    },
+    "marco": {
+        "description": "Truth-Teller (TypeScript) - challenges assumptions",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-flash",
+        "prompt": "{file:~/.config/opencode/agent/marco.md}"
+    },
+    "marco_opus": {
+        "description": "Marco (Pro) - Truth-teller using DeepSeek Pro",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-pro",
+        "prompt": "{file:~/.config/opencode/agent/marco.md}"
+    },
+    "marco_qwen": {
+        "description": "Marco (Flash) - Truth-teller using DeepSeek Flash",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-flash",
+        "prompt": "{file:~/.config/opencode/agent/marco.md}"
+    },
+    "marco_grok": {
+        "description": "Marco (Flash) - Truth-teller using DeepSeek Flash",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-flash",
+        "prompt": "{file:~/.config/opencode/agent/marco.md}"
+    }
+}

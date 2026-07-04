@@ -3,6 +3,7 @@
 .opencode/bun.lock
 .opencode/package.json
 .opencode/.gitignore
+opencode.json
 
 # Python
 __pycache__/
