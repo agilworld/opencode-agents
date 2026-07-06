@@ -29,7 +29,7 @@ This project uses a multi-agent system for context-efficient development.
 | **@jester** | Claude Opus | Default truth-teller |
 | **@jester_opus** | Claude Opus | Explicit Opus variant |
 | **@jester_qwen** | Qwen3 Coder | Code-focused analysis |
-| **@jester_grok** | Grok | Alternative perspective |
+| **@jester_gemini** | Gemini | Alternative perspective |
 
 ### Workflow
 
@@ -56,7 +56,7 @@ Oscar
   │
   ├──→ @jester_opus ──┐
   ├──→ @jester_qwen ──┼──→ Synthesize → Decision
-  └──→ @jester_grok ──┘
+  └──→ @jester_gemini ──┘
 ```
 
 **When to use:**

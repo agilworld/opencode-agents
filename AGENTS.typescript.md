@@ -29,7 +29,7 @@ This project uses a multi-agent system for context-efficient development.
 |-------|-------|---------|
 | **@marco_opus** | DeepSeek Pro | Default truth-teller |
 | **@marco_qwen** | DeepSeek Flash | Code-focused analysis |
-| **@marco_grok** | DeepSeek Flash | Alternative perspective |
+| **@marco_gemini** | DeepSeek Flash | Alternative perspective |
 
 ### Workflow
 
@@ -57,7 +57,7 @@ Ostype
   │
   ├──→ @marco_opus ──┐
   ├──→ @marco_qwen ──┼──→ Synthesize → Decision
-  └──→ @marco_grok ──┘
+  └──→ @marco_gemini ──┘
 ```
 
 **When to use:**

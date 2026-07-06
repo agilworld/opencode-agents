@@ -28,7 +28,7 @@ Two stacks are available: **Python** and **TypeScript**.
 |-------|-------|---------|
 | `jester_opus` | DeepSeek Pro | Consensus trio |
 | `jester_qwen` | DeepSeek Flash | Consensus trio |
-| `jester_grok` | DeepSeek Flash | Consensus trio |
+| `jester_gemini` | DeepSeek Flash | Consensus trio |
 
 ### TypeScript Stack
 
@@ -47,7 +47,7 @@ Two stacks are available: **Python** and **TypeScript**.
 |-------|-------|---------|
 | `marco_opus` | DeepSeek Pro | Consensus trio |
 | `marco_qwen` | DeepSeek Flash | Consensus trio |
-| `marco_grok` | DeepSeek Flash | Consensus trio |
+| `marco_gemini` | DeepSeek Flash | Consensus trio |
 
 ---
 
@@ -105,7 +105,7 @@ Oscar/Ostype
   │
   ├──→ @jester_opus / @marco_opus ──┐
   ├──→ @jester_qwen / @marco_qwen ──┼──→ Synthesize → Decision
-  └──→ @jester_grok / @marco_grok ──┘
+  └──→ @jester_gemini / @marco_gemini ──┘
 ```
 
 ---
@@ -124,20 +124,45 @@ Or see [opencode installation docs](https://github.com/sst/opencode#installation
 
 ```bash
 # Clone this repo
-git clone https://github.com/yourusername/opencode-agents.git
+git clone https://github.com/<your-org>/opencode-agents.git
 cd opencode-agents
-
-# Run the installer
-./install.sh
 ```
 
-The installer will prompt you to:
+Choose your platform:
+
+**Linux / macOS / WSL:**
+```bash
+# Interactive (prompts for stack and QA)
+./install.sh
+
+# Or use Makefile shortcuts:
+make install              # Interactive
+make install-python       # Non-interactive: Python, no QA
+make install-typescript   # Non-interactive: TypeScript, no QA
+
+# Non-interactive with env vars:
+STACK=typescript WITH_QA=true ./install.sh
+STACK=python WITH_QA=false ./install.sh
+```
+
+**Windows (native PowerShell):**
+```powershell
+.\install.ps1
+
+# Non-interactive:
+$env:STACK="typescript"; $env:WITH_QA="false"; .\install.ps1
+```
+
+The installer detects your OS (Linux, macOS, WSL) and then prompts you to:
 
 1. **Select tech stack** — Python or TypeScript
 2. **Include QA Engineer** — Optionally add a QA + Documentation agent to the team
 3. **Generate opencode.json** — Automatically merges `agents.json` into the template
+4. **Copy AGENTS.md** — Replaces the generic template with your stack's version (`AGENTS.python.md` or `AGENTS.typescript.md`)
 
-The installer copies agent `.md` files to `~/.config/opencode/agent/` and generates `~/.config/opencode/opencode.json` from the selected stack's `agents.json`.
+The installer copies agent `.md` files to `~/.config/opencode/agent/`, installs skills to `~/.config/opencode/skills/`, generates `~/.config/opencode/opencode.json` from the selected stack's `agents.json`, and overwrites `AGENTS.md` in the project root with the stack-specific version.
+
+Skip prompts with env vars: `STACK=typescript WITH_QA=false ./install.sh`
 
 ### 3. Set your API key
 
@@ -145,13 +170,17 @@ The installer copies agent `.md` files to `~/.config/opencode/agent/` and genera
 export ZEN_API_KEY="your-api-key-here"
 ```
 
-### 4. Copy AGENTS.md to your project
+### 4. Customize AGENTS.md
 
-```bash
-cp AGENTS.md /path/to/your/project/
-```
+The installer already replaced the generic `AGENTS.md` template with your stack's version. Edit it to add your project's specific context:
 
-Edit `AGENTS.md` in your project to add project-specific context.
+- [ ] **Project Overview** — what this project does
+- [ ] **Quick Start** — setup commands for your specific toolchain
+- [ ] **Project Structure** — actual directory layout
+- [ ] **Architecture** — key design decisions
+- [ ] **Configuration** — environment variables and config files
+
+To use the agent system in other projects, copy the customized `AGENTS.md` and re-run the installer there.
 
 ### 5. Start using agents
 
@@ -179,7 +208,7 @@ Agent registrations live in `agents.json` at each stack path:
 - `.opencode/agent/python/agents.json`
 - `.opencode/agent/typescript/agents.json`
 
-The installer reads the selected `agents.json` and merges it into `opencode.json.example` to produce `~/.config/opencode/opencode.json`.
+The installer reads the selected `agents.json` and merges it into `opencode.json.example` to produce `~/.config/opencode/opencode.json`. The installer also replaces the generic `AGENTS.md` template with the stack-specific version (`AGENTS.python.md` or `AGENTS.typescript.md`).
 
 ### Example generated config
 
@@ -254,9 +283,13 @@ opencode-agents/
 │       ├── senior-qa/
 │       ├── test-driven-development/
 │       └── ... (40+ skills)
-├── AGENTS.md                         # Template for project-specific context
+├── AGENTS.md                         # Stack-agnostic template (replaced by installer)
+├── AGENTS.python.md                  # Python stack AGENTS.md source
+├── AGENTS.typescript.md              # TypeScript stack AGENTS.md source
 ├── README.md                         # This file
-├── install.sh                        # Installer script
+├── install.sh                        # Linux/macOS/WSL installer
+├── install.ps1                       # Native Windows PowerShell installer
+├── Makefile                          # Convenience targets (make install, etc.)
 └── opencode.json.example             # Template config (agents filled by installer)
 ```
 
