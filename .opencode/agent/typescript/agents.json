@@ -36,21 +36,21 @@
         "prompt": "{file:~/.config/opencode/agent/marco.md}"
     },
     "marco_opus": {
-        "description": "Marco (Pro) - Truth-teller using DeepSeek Pro",
+        "description": "Marco (Opus) - Truth-teller using Claude Opus",
         "mode": "subagent",
-        "model": "zen/deepseek-v4-pro",
+        "model": "zen/claude-opus-4-8",
         "prompt": "{file:~/.config/opencode/agent/marco.md}"
     },
     "marco_qwen": {
-        "description": "Marco (Flash) - Truth-teller using DeepSeek Flash",
+        "description": "Marco (Qweb) - Truth-teller using Qwen",
         "mode": "subagent",
-        "model": "zen/deepseek-v4-flash",
+        "model": "zen/qwen3.6-plus",
         "prompt": "{file:~/.config/opencode/agent/marco.md}"
     },
-    "marco_grok": {
-        "description": "Marco (Flash) - Truth-teller using DeepSeek Flash",
+    "marco_gemini": {
+        "description": "Marco (Gemini) - Truth-teller using Gemini",
         "mode": "subagent",
-        "model": "zen/deepseek-v4-flash",
+        "model": "zen/gemini-3-flash",
         "prompt": "{file:~/.config/opencode/agent/marco.md}"
     }
 }

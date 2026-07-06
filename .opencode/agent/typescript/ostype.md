@@ -235,7 +235,7 @@ Roast this. What's dumb about it? What would you delete?
 # Launch all three in PARALLEL (single message, multiple tool calls)
 @marco_opus: [question/assessment request]
 @marco_qwen: [same question/assessment request]
-@marco_grok: [same question/assessment request]
+@marco_gemini: [same question/assessment request]
 ```
 
 ### Synthesizing Consensus
@@ -253,7 +253,7 @@ After all three respond, synthesize their feedback:
 ### Unique Insights
 - **Opus noted:** [unique point]
 - **Qwen noted:** [unique point]
-- **Grok noted:** [unique point]
+- **Gemini noted:** [unique point]
 
 ### My Recommendation
 Based on the consensus: [your synthesis and recommendation]
@@ -265,7 +265,7 @@ Based on the consensus: [your synthesis and recommendation]
 The module has 8 files and handles position sizing. Roast this approach.
 
 @marco_qwen: [same prompt]
-@marco_grok: [same prompt]
+@marco_gemini: [same prompt]
 ```
 
 ## What You DO

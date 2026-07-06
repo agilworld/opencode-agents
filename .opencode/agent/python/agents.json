@@ -30,21 +30,21 @@
         "prompt": "{file:~/.config/opencode/agent/jester.md}"
     },
     "jester_opus": {
-        "description": "Jester (Opus) - Truth-teller using DeepSeek Pro",
+        "description": "Jester (Opus) - Truth-teller using Claude Opus",
         "mode": "subagent",
-        "model": "zen/deepseek-v4-flash",
+        "model": "zen/claude-opus-4-8",
         "prompt": "{file:~/.config/opencode/agent/jester.md}"
     },
     "jester_qwen": {
-        "description": "Jester (Qwen) - Truth-teller using DeepSeek Flash",
+        "description": "Jester (Qwen) - Truth-teller using Qwen",
         "mode": "subagent",
-        "model": "zen/deepseek-v4-flash",
+        "model": "zen/qwen3.6-plus",
         "prompt": "{file:~/.config/opencode/agent/jester.md}"
     },
-    "jester_grok": {
-        "description": "Jester (Grok) - Truth-teller using DeepSeek Flash",
+    "jester_gemini": {
+        "description": "Jester (Gemini) - Truth-teller using Gemini Flash",
         "mode": "subagent",
-        "model": "zen/deepseek-v4-flash",
+        "model": "zen/gemini-3-flash",
         "prompt": "{file:~/.config/opencode/agent/jester.md}"
     }
 }

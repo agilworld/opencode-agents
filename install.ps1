@@ -253,5 +253,6 @@ foreach ($agent in $installedAgents) {
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Yellow
 Write-Host "  1. Verify $env:USERPROFILE\.config\opencode\opencode.json has the correct agents" -ForegroundColor White
-Write-Host "  2. Set your ZEN_API_KEY environment variable" -ForegroundColor White
+Write-Host "  2. Set your ZEN_API_KEY or provider API key variable in opencode.json" -ForegroundColor White
 Write-Host "  3. Run 'opencode' to start!" -ForegroundColor White
+Write-Host "  4. Select primary agent ostype/oscar and run prompt" -ForegroundColor White
