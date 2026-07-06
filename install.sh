@@ -5,6 +5,37 @@
 
 set -e
 
+# OS Detection
+OS="Unknown"
+IS_WSL=false
+
+case "$(uname -s)" in
+    Linux)
+        if [ -f /proc/sys/fs/binfmt_misc/WSLInterop ] || [ -n "$WSL_DISTRO_NAME" ]; then
+            OS="WSL"
+            IS_WSL=true
+            echo "→ WSL (Windows Subsystem for Linux) detected"
+        else
+            OS="Linux"
+            echo "→ Linux detected"
+        fi
+        ;;
+    Darwin)
+        OS="macOS"
+        echo "→ macOS detected — native Unix support"
+        ;;
+    MSYS_NT-*|MINGW*|CYGWIN*)
+        OS="GitBash"
+        echo "⚠ Git Bash/MSYS2 detected — this script is designed for Linux/macOS/WSL"
+        echo "  For native Windows, use: .\install.ps1"
+        echo "  Continuing anyway (may work if python3 is available)..."
+        ;;
+    *)
+        echo "⚠ Unknown OS: $(uname -s) — proceeding with Unix defaults"
+        OS="Unknown"
+        ;;
+esac
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SOURCE_DIR="$SCRIPT_DIR/.opencode/agent"
 TARGET_DIR="$HOME/.config/opencode/agent"
@@ -19,30 +50,75 @@ if [ ! -d "$SOURCE_DIR" ]; then
     exit 1
 fi
 
-# Ask which tech stack
-echo "Select tech stack:"
-echo "  1) Python"
-echo "  2) TypeScript"
-read -p "Enter choice [1-2]: " STACK_CHOICE
-echo ""
+# ─── Tech Stack Selection ──────────────────────────────────────
+if [ -n "$STACK" ]; then
+    case "$STACK" in
+        python|typescript)
+            echo "→ Stack pre-selected via STACK env var: $STACK"
+            STACK_CHOICE="$STACK"
+            ;;
+        *)
+            echo "Error: Invalid STACK value '$STACK'. Must be 'python' or 'typescript'."
+            exit 1
+            ;;
+    esac
+else
+    echo "Select tech stack:"
+    echo "  1) Python"
+    echo "  2) TypeScript"
+    read -p "Enter choice (1 or 2): " STACK_CHOICE
+
+    case "$STACK_CHOICE" in
+        1|python|Python)
+            STACK_CHOICE="python"
+            ;;
+        2|typescript|TypeScript|ts|TS)
+            STACK_CHOICE="typescript"
+            ;;
+        *)
+            echo "Invalid choice. Please select 1 or 2."
+            exit 1
+            ;;
+    esac
+fi
 
 case "$STACK_CHOICE" in
-    1) STACK="python"
-       STACK_NAME="Python"
-       ;;
-    2) STACK="typescript"
-       STACK_NAME="TypeScript"
-       ;;
-    *) echo "Invalid choice. Exiting."
-       exit 1
-       ;;
+    python) STACK="python"
+            STACK_NAME="Python"
+            ;;
+    typescript) STACK="typescript"
+                STACK_NAME="TypeScript"
+                ;;
 esac
 
-# Ask about QA Engineer
-read -p "Include QA Engineer/Documenter in the team? (y/N): " -n 1 -r QA_CHOICE
-echo ""
+# ─── QA Engineer Agent ─────────────────────────────────────────
+if [ -n "$WITH_QA" ]; then
+    case "$(echo "$WITH_QA" | tr '[:upper:]' '[:lower:]')" in
+        true|1|yes|y)
+            INCLUDE_QA="y"
+            echo "→ QA agent pre-selected via WITH_QA env var: yes"
+            ;;
+        false|0|no|n)
+            INCLUDE_QA="n"
+            echo "→ QA agent pre-selected via WITH_QA env var: no"
+            ;;
+        *)
+            echo "Error: Invalid WITH_QA value '$WITH_QA'. Use true/false, yes/no, 1/0."
+            exit 1
+            ;;
+    esac
+else
+    read -p "Include QA Engineer/Documenter in the team? (y/N): " -n 1 -r QA_CHOICE
+    echo ""
 
-if [[ $QA_CHOICE =~ ^[Yy]$ ]]; then
+    if [[ $QA_CHOICE =~ ^[Yy]$ ]]; then
+        INCLUDE_QA="y"
+    else
+        INCLUDE_QA="n"
+    fi
+fi
+
+if [ "$INCLUDE_QA" = "y" ]; then
     WITH_QA=true
 else
     WITH_QA=false
@@ -174,6 +250,17 @@ print('  ✓ Agents registered:', ', '.join(agents.keys()))
     else
         echo "Skipping opencode.json generation."
     fi
+fi
+
+# ─── AGENTS.md Configuration ──────────────────────────────────
+echo ""
+echo "Configuring AGENTS.md for $STACK_NAME stack..."
+
+if [ -f "$SCRIPT_DIR/AGENTS.$STACK.md" ]; then
+    cp "$SCRIPT_DIR/AGENTS.$STACK.md" "$SCRIPT_DIR/AGENTS.md"
+    echo "  ✓ AGENTS.md generated from AGENTS.$STACK.md"
+else
+    echo "  ⚠ Warning: AGENTS.$STACK.md not found — skipping AGENTS.md generation"
 fi
 
 # ──────────────────────────────────────────────
