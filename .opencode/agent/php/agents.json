@@ -1,0 +1,50 @@
+{
+    "senar": {
+        "description": "Orchestrator - coordinates, delegates, synthesizes",
+        "mode": "primary",
+        "model": "zen/deepseek-v4-pro",
+        "prompt": "{file:~/.config/opencode/agent/semar.md}"
+    },
+    "petruk": {
+        "description": "Researcher + Planner - deep analysis, actionable plans",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-pro",
+        "prompt": "{file:~/.config/opencode/agent/petruk.md}"
+    },
+    "gareng": {
+        "description": "Implementor - writes code, runs tests, git operations",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-flash",
+        "prompt": "{file:~/.config/opencode/agent/gareng.md}"
+    },
+    "sengkuni": {
+        "description": "QA Engineer + Documenter - verifies implementations, writes tests, maintains docs",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-flash",
+        "prompt": "{file:~/.config/opencode/agent/sengkuni.md}"
+    },
+    "bagong": {
+        "description": "Truth-Teller (default) - challenges assumptions",
+        "mode": "subagent",
+        "model": "zen/deepseek-v4-pro",
+        "prompt": "{file:~/.config/opencode/agent/bagong.md}"
+    },
+    "bagong_opus": {
+        "description": "Bagong (Opus) - Truth-teller using Claude Opus",
+        "mode": "subagent",
+        "model": "zen/claude-opus-4-8",
+        "prompt": "{file:~/.config/opencode/agent/bagong.md}"
+    },
+    "bagong_qwen": {
+        "description": "Bagong (Qwen) - Truth-teller using Qwen",
+        "mode": "subagent",
+        "model": "zen/qwen3.6-plus",
+        "prompt": "{file:~/.config/opencode/agent/bagong.md}"
+    },
+    "bagong_gemini": {
+        "description": "Bagong (Gemini) - Truth-teller using Gemini Flash",
+        "mode": "subagent",
+        "model": "zen/gemini-3-flash",
+        "prompt": "{file:~/.config/opencode/agent/bagong.md}"
+    }
+}

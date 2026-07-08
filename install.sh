@@ -66,7 +66,8 @@ else
     echo "Select tech stack:"
     echo "  1) Python"
     echo "  2) TypeScript"
-    read -p "Enter choice (1 or 2): " STACK_CHOICE
+    echo "  3) PHP"
+    read -p "Enter choice (1 or 2 or 3): " STACK_CHOICE
 
     case "$STACK_CHOICE" in
         1|python|Python)
@@ -75,8 +76,11 @@ else
         2|typescript|TypeScript|ts|TS)
             STACK_CHOICE="typescript"
             ;;
+        3|php|PHP)
+            STACK_CHOICE="php"
+            ;;
         *)
-            echo "Invalid choice. Please select 1 or 2."
+            echo "Invalid choice. Please select 1, 2, or 3."
             exit 1
             ;;
     esac
@@ -89,6 +93,9 @@ case "$STACK_CHOICE" in
     typescript) STACK="typescript"
                 STACK_NAME="TypeScript"
                 ;;
+    php) STACK="php"
+         STACK_NAME="PHP"
+         ;;
 esac
 
 # ─── QA Engineer Agent ─────────────────────────────────────────

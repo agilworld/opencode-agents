@@ -35,8 +35,13 @@ if ($env:STACK) {
             $StackName = "TypeScript"
             Write-Host "-> Stack pre-selected via STACK env var: $Stack" -ForegroundColor Yellow
         }
+        "php" {
+            $Stack = "php"
+            $StackName = "PHP"
+            Write-Host "-> Stack pre-selected via STACK env var: $Stack" -ForegroundColor Yellow
+        }
         default {
-            Write-Host "Error: Invalid STACK value '$env:STACK'. Must be 'python' or 'typescript'." -ForegroundColor Red
+            Write-Host "Error: Invalid STACK value '$env:STACK'. Must be 'python', 'typescript', or 'php'." -ForegroundColor Red
             exit 1
         }
     }
@@ -46,7 +51,8 @@ if (-not $Stack) {
     Write-Host "Select tech stack:"
     Write-Host "  1) Python"
     Write-Host "  2) TypeScript"
-    $choice = Read-Host "Enter choice (1 or 2)"
+    Write-Host "  3) PHP"
+    $choice = Read-Host "Enter choice (1 or 2 or 3)"
 
     switch -Regex ($choice) {
         "^1$|^python$|^Python$" {
@@ -56,6 +62,10 @@ if (-not $Stack) {
         "^2$|^typescript$|^TypeScript$|^ts$|^TS$" {
             $Stack = "typescript"
             $StackName = "TypeScript"
+        }
+        "^3$|^php$|^PHP$" {
+            $Stack = "php"
+            $StackName = "PHP"
         }
         default {
             Write-Host "Invalid choice. Please select 1 or 2." -ForegroundColor Red
@@ -179,6 +189,9 @@ if (-not (Test-Path $AgentsJson)) {
                     if ($Stack -eq "python") {
                         # In Python stack, 'marco' is the QA engineer -- remove it
                         $agents.PSObject.Properties.Remove("marco")
+                    } else if ($Stack -eq "php") {
+                        # In PHP stack, 'sengkuni' is the QA engineer -- remove it
+                        $agents.PSObject.Properties.Remove("marco")
                     } else {
                         # In TypeScript stack, 'quill' is the QA engineer -- remove it
                         $agents.PSObject.Properties.Remove("quill")
@@ -191,6 +204,8 @@ if (-not (Test-Path $AgentsJson)) {
                 # Set default_agent based on stack
                 if ($Stack -eq "python") {
                     $config.default_agent = "oscar"
+                } else if ($Stack -eq "php") {
+                    $config.default_agent = "semar"
                 } else {
                     $config.default_agent = "ostype"
                 }
@@ -255,4 +270,4 @@ Write-Host "Next steps:" -ForegroundColor Yellow
 Write-Host "  1. Verify $env:USERPROFILE\.config\opencode\opencode.json has the correct agents" -ForegroundColor White
 Write-Host "  2. Set your ZEN_API_KEY or provider API key variable in opencode.json" -ForegroundColor White
 Write-Host "  3. Run 'opencode' to start!" -ForegroundColor White
-Write-Host "  4. Select primary agent ostype/oscar and run prompt" -ForegroundColor White
+Write-Host "  4. Select primary agent ostype/oscar/semar and run prompt" -ForegroundColor White
